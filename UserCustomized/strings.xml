@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RDMD</string>
+    <string name="seacrchButton">검색</string>
+    <string name="ButtonUser4">응급병원</string>
+    <string name="buttonUser1">산재재활병원</string>
+    <string name="User">맞춤형 사용자</string>
+    <string name="editText1">검색 하고 싶은 위치를 입력</string>
+    <string name="TextUser1">근로자</string>
+    <string name="TextUser2">노약자</string>
+    <string name="TextUser3">소아</string>
+    <string name="TextUser4">응급환자</string>
+    <string name="buttonUser2">요양병원</string>
+    <string name="buttonUser3">야간진료병원</string>
+    <string name="textView">조회 결과</string>
+</resources>
