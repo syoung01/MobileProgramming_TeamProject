@@ -125,7 +125,24 @@
         android:background="#FFEFD5"/>
 
 
-    <ScrollView
+     <ListView
+        android:layout_below="@+id/textView"
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+       </ListView>
+
+
+</RelativeLayout>
+
+
+
+
+----------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+<변경 전>
+       <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -141,12 +158,6 @@
 
 
     </ScrollView>
-
-
-</RelativeLayout>
-
-
-
 
 
 
