@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RDMD1_2</string>
+    <string name="textView">"          우수기관 질병 별 병원 검색"</string>
+    <string name="textView2">1) 평가 항목 선택</string>
+    <string name="button1">암 질환</string>
+    <string name="button2">만성질환</string>
+    <string name="button3">급성질환</string>
+    <string name="textView3">2) 세부 항목 선택</string>
+    <string name="rd_btn1">대장암</string>
+    <string name="rd_btn2">위암</string>
+    <string name="rd_btn3">폐암</string>
+    <string name="textView4">조회 결과</string>
+</resources>
