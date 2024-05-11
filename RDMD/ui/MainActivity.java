@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_map, R.id.navigation_pet, R.id.navigation_home,
                 R.id.navigation_custom, R.id.navigation_rank)
@@ -35,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        // MainActivity에서 바텀 네비게이션 이벤트를 처리할 때 NavHostFragment를 사용
+        // MainActivity에서 바텀 네비게이션 이벤트를 처리할 때 NavHostFragment를 사용합니다.
         NavigationUI.setupWithNavController(navView, navController);
 
-        // ActionBar를 설정할 때도 NavHostFragment를 사용
+        // ActionBar를 설정할 때도 NavHostFragment를 사용합니다.
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         navView.setOnNavigationItemSelectedListener(item -> {
@@ -57,15 +60,39 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //CustomFragment로부터 UI 업데이트 요청을 처리
-    public void updateUI(ArrayList<String> items) {
-        // CustomFragment의 ListView를 찾아서 업데이트
-        CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
-        if (customFragment != null) {
-            customFragment.updateListView(items);
+    // 버튼 클릭 이벤트를 처리하는 메서드
+    public void mOnClick(View v) {
+        if (v.getId() == R.id.Ueser1) {
+            CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
+            if (customFragment != null) {
+                customFragment.mOnClick(v);
+            }
         }
     }
-
+    public void mOnClick2(View v) {
+        if (v.getId() == R.id.Ueser2) {
+            CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
+            if (customFragment != null) {
+                customFragment.mOnClick2(v);
+            }
+        }
+    }
+    public void mOnClick3(View v) {
+        if (v.getId() == R.id.Ueser3) {
+            CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
+            if (customFragment != null) {
+                customFragment.mOnClick3(v);
+            }
+        }
+    }
+    public void mOnClick4(View v) {
+        if (v.getId() == R.id.Ueser4) {
+            CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
+            if (customFragment != null) {
+                customFragment.mOnClick4(v);
+            }
+        }
+    }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
