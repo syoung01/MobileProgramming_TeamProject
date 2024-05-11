@@ -1,5 +1,8 @@
+package androidtown.org.termproject.ui.custom;
+
 import static java.net.URLEncoder.*;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -70,10 +73,40 @@ public class CustomFragment extends Fragment {
 
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.Ueser1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClick(v);
+            }
+        });
+        view.findViewById(R.id.Ueser2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClick2(v);
+            }
+        });
+        view.findViewById(R.id.Ueser3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClick3(v);
+            }
+        });
+        view.findViewById(R.id.Ueser4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClick4(v);
+            }
+        });
+    }
+
     //근로자 버튼 layout에 android:onClick="mOnClick"
     public void mOnClick(View v) {
         if (v.getId() == R.id.Ueser1) {
-            new Thread() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
@@ -114,14 +147,6 @@ public class CustomFragment extends Fragment {
 
                             switch (eventType) {
                                 case XmlPullParser.START_DOCUMENT:
-
-                                    /*runOnUiThread(new Runnable() { //현재 시점이 ui thread 면 실행
-                                        @Override
-                                        public void run() {
-                                            //   Toast.makeText(MainActivity.this, "파싱을 시작했다.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
-
                                     break;
 
                                 case XmlPullParser.START_TAG: // 태그의 시작일 때
@@ -169,33 +194,11 @@ public class CustomFragment extends Fragment {
                                     if (tag.equals("items")) { //하나의 정보가 끝나면
                                         //파싱 결과를 items 리스트에 추가
                                         items.add(buffer.toString());
-                                        /*//listView 업데이트(갱신)
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });*/
                                     }
                                     break;
                             }
                             eventType = xpp.next();
                         }
-                        // UI 업데이트를 Activity에 요청
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // ListView 갱신
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        /*runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Toast.makeText(MainActivity.this, "파싱종료!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });*/
-
                         //xml 파싱 시 발생 가능한 예외 처리
                     } catch (MalformedURLException e) { //네트워크 연결 관련
                         e.printStackTrace();
@@ -204,16 +207,23 @@ public class CustomFragment extends Fragment {
                     } catch (XmlPullParserException e) { //xml 파싱 관련
                         e.printStackTrace();
                     }
+
+                    // 데이터 로드 후 UI 업데이트 요청
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            }.start();
+            }).start();
         }
     }
-
 
     //노약자
     public void mOnClick2(View v) {
         if (v.getId() == R.id.Ueser2) {
-            new Thread() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
@@ -226,13 +236,6 @@ public class CustomFragment extends Fragment {
                             "&pageNo=1&numOfRows=500";
 
                     try {
-                        /*과정
-                         * 1. URL 객체 만들어 stream 열고 inputStream에게 준다.
-                         * 2. InputStream은 byte씩 데이터 전송으로 불편 --> InputStreamReader(바이트->문자 입력 스트림으로) 변경
-                         * 3. InputSteamReader를 XmlPullParser에게 준다.
-                         * 4. ui로 띄울 데이터의 내용들은 stringBuffer로 저장.*/
-
-
                         // URL 객체 생성
                         URL url = new URL(queryUrl);
                         //Stream 열기
@@ -254,14 +257,6 @@ public class CustomFragment extends Fragment {
 
                             switch (eventType) {
                                 case XmlPullParser.START_DOCUMENT:
-
-                                    /*runOnUiThread(new Runnable() { //현재 시점이 ui thread 면 실행
-                                        @Override
-                                        public void run() {
-                                            //   Toast.makeText(MainActivity.this, "파싱을 시작했다.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
-
                                     break;
 
                                 case XmlPullParser.START_TAG: // 태그의 시작일 때
@@ -318,36 +313,12 @@ public class CustomFragment extends Fragment {
 
                                         //파싱 결과를 items 리스트에 추가
                                         items.add(buffer.toString());
-
-                                        /*//listView 업데이트(갱신)
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });*/
                                     }
 
                                     break;
                             }
                             eventType = xpp.next();
                         }
-                        // UI 업데이트를 Activity에 요청
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // ListView 갱신
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        /*runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Toast.makeText(MainActivity.this, "파싱종료!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });*/
-
                         //xml 파싱 시 발생 가능한 예외 처리
                     } catch (MalformedURLException e) { //네트워크 연결 관련
                         e.printStackTrace();
@@ -356,17 +327,22 @@ public class CustomFragment extends Fragment {
                     } catch (XmlPullParserException e) { //xml 파싱 관련
                         e.printStackTrace();
                     }
+                    // 데이터 로드 후 UI 업데이트 요청
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            }.start();
+            }).start();
         }
     }
 
-
     //어린이 (소아) 야간 진료 병원
-
     public void mOnClick3(View v) {
         if (v.getId() == R.id.Ueser3) {
-            new Thread() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
@@ -379,13 +355,6 @@ public class CustomFragment extends Fragment {
                             "&numOfRows=500";
 
                     try {
-                        /*과정
-                         * 1. URL 객체 만들어 stream 열고 inputStream에게 준다.
-                         * 2. InputStream은 byte씩 데이터 전송으로 불편 --> InputStreamReader(바이트->문자 입력 스트림으로) 변경
-                         * 3. InputSteamReader를 XmlPullParser에게 준다.
-                         * 4. ui로 띄울 데이터의 내용들은 stringBuffer로 저장.*/
-
-
                         // URL 객체 생성
                         URL url = new URL(queryUrl);
                         //Stream 열기
@@ -407,14 +376,6 @@ public class CustomFragment extends Fragment {
 
                             switch (eventType) {
                                 case XmlPullParser.START_DOCUMENT:
-
-                                    /*runOnUiThread(new Runnable() { //현재 시점이 ui thread 면 실행
-                                        @Override
-                                        public void run() {
-                                            //   Toast.makeText(MainActivity.this, "파싱을 시작했다.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
-
                                     break;
 
                                 case XmlPullParser.START_TAG: // 태그의 시작일 때
@@ -471,36 +432,12 @@ public class CustomFragment extends Fragment {
 
                                         //파싱 결과를 items 리스트에 추가
                                         items.add(buffer.toString());
-
-                                        /*//listView 업데이트(갱신)
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });*/
                                     }
 
                                     break;
                             }
                             eventType = xpp.next();
                         }
-                        // UI 업데이트를 Activity에 요청
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // ListView 갱신
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        /*runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Toast.makeText(MainActivity.this, "파싱종료!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });*/
-
                         //xml 파싱 시 발생 가능한 예외 처리
                     } catch (MalformedURLException e) { //네트워크 연결 관련
                         e.printStackTrace();
@@ -509,15 +446,21 @@ public class CustomFragment extends Fragment {
                     } catch (XmlPullParserException e) { //xml 파싱 관련
                         e.printStackTrace();
                     }
+                    // 데이터 로드 후 UI 업데이트 요청
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            }.start();
+            }).start();
         }
     }
-
     //응급환자 (응급병원)
     public void mOnClick4(View v) {
         if (v.getId() == R.id.Ueser4) {
-            new Thread() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
@@ -530,13 +473,6 @@ public class CustomFragment extends Fragment {
                             "&pageNo=1&numOfRows=500";
 
                     try {
-                        /*과정
-                         * 1. URL 객체 만들어 stream 열고 inputStream에게 준다.
-                         * 2. InputStream은 byte씩 데이터 전송으로 불편 --> InputStreamReader(바이트->문자 입력 스트림으로) 변경
-                         * 3. InputSteamReader를 XmlPullParser에게 준다.
-                         * 4. ui로 띄울 데이터의 내용들은 stringBuffer로 저장.*/
-
-
                         // URL 객체 생성
                         URL url = new URL(queryUrl);
                         //Stream 열기
@@ -558,14 +494,6 @@ public class CustomFragment extends Fragment {
 
                             switch (eventType) {
                                 case XmlPullParser.START_DOCUMENT:
-
-                                    /*runOnUiThread(new Runnable() { //현재 시점이 ui thread 면 실행
-                                        @Override
-                                        public void run() {
-                                            //   Toast.makeText(MainActivity.this, "파싱을 시작했다.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });*/
-
                                     break;
 
                                 case XmlPullParser.START_TAG: // 태그의 시작일 때
@@ -614,37 +542,12 @@ public class CustomFragment extends Fragment {
 
                                         //파싱 결과를 items 리스트에 추가
                                         items.add(buffer.toString());
-
-                                        /*//listView 업데이트(갱신)
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });*/
                                     }
 
                                     break;
                             }
                             eventType = xpp.next();
                         }
-
-                        // UI 업데이트를 Activity에 요청
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // ListView 갱신
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
-                        /*runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Toast.makeText(MainActivity.this, "파싱종료!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });*/
-
                         //xml 파싱 시 발생 가능한 예외 처리
                     } catch (MalformedURLException e) { //네트워크 연결 관련
                         e.printStackTrace();
@@ -653,22 +556,15 @@ public class CustomFragment extends Fragment {
                     } catch (XmlPullParserException e) { //xml 파싱 관련
                         e.printStackTrace();
                     }
+                    // 데이터 로드 후 UI 업데이트 요청
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            }.start();
+            }).start();
         }
-    }
-
-    //ListView를 업데이트함
-    public void updateListView(ArrayList<String> items) {
-        //UI 업데이트를 메인 스레드에서 실행해야 하므로 runOnUiThread()를 사용
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //ListView를 업데이트
-                adapter.clear(); //기존 아이템 제거
-                adapter.addAll(items); //새로운 아이템 추가
-                adapter.notifyDataSetChanged(); //변경 내용을 ListView에 반영
-            }
-        });
     }
 }
