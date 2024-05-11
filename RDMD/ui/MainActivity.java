@@ -93,6 +93,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    // RankFragment 버튼 클릭 이벤트를 처리하는 메서드
+    public void mOnClick_rank1(View v) {
+        if (v.getId() == R.id.rg_btn1) {
+            RankFragment rankFragment = (RankFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_rank);
+            if (rankFragment != null) {
+                rankFragment.mOnClick_rank1(v);
+            }
+        }
+    }
+    public void mOnClick_rank2(View v) {
+        if (v.getId() == R.id.rg_btn2) {
+            RankFragment rankFragment = (RankFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_rank);
+            if (rankFragment != null) {
+                rankFragment.mOnClick_rank2(v);
+            }
+        }
+    }
+    public void mOnClick_rank3(View v) {
+        if (v.getId() == R.id.rg_btn3) {
+            RankFragment rankFragment = (RankFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_rank);
+            if (rankFragment != null) {
+                rankFragment.mOnClick_rank3(v);
+            }
+        }
+    }
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
