@@ -1,24 +1,19 @@
-Unfinshed version
+package com.example.mobile_final;
 
-Finding the nearby hospital using the Goodgle API
-
-Current problem: marks does not pop up, cannot tell whether it is actually researched.
-
-package com.example.mobile_pro_final;
-
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -29,7 +24,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> name_list;
     ArrayList<String> vicinity_list;
     // 지도의 표시한 마커(주변장소표시)를 관리하는 객체를 담을 리스트
+
+    public int selectedCategoryIndex = -1;
+
     ArrayList<Marker> markers_list;
     // 다이얼로그를 구성하기 위한 배열
     String[] category_name_array={
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     };
     // types 값 배열
     String[] category_value_array={
-            "all","hospital","vet"
+            "all","hospital","veterinary_care"
     };
 
     String[] permission_list = {
@@ -75,23 +72,26 @@ public class MainActivity extends AppCompatActivity {
     TextView text;
     // 위치 정보를 관리하는 매니저
     LocationManager manager;
-    // 지도를 관리하는 객체(추가부분)
+    // 지도를 관리하는 객체
     GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 구글 맵 객체를 추출
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment map_frag = (SupportMapFragment) fm.findFragmentById(R.id.fragment);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
-        // 비동기적으로 Google 지도를 설정한다
+        // 권한 확인
+        checkPermission();
+
+        // 구글 맵 객체 추출
+        SupportMapFragment mapFragment = (SupportMapFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+        // Google 지도 설정
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                // GoogleMap 객체를 초기화할 수 있음
+                // GoogleMap 객체 초기화
                 map = googleMap;
             }
         });
@@ -100,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
         name_list=new ArrayList<>();
         vicinity_list=new ArrayList<>();
         markers_list=new ArrayList<>();
-        // 권한 확인
-        checkPermission();
     }
 
     public void checkPermission() {
@@ -134,36 +132,6 @@ public class MainActivity extends AppCompatActivity {
             getMyLocation();
         }
     }
-    // 주변 카테고리 리스트
-    private void showCategoryList() {
-        // 카테고리를 선택 할 수 있는 리스트를 띄운다.
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("장소 타입 선택");
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(
-                this,android.R.layout.simple_list_item_1,category_name_array
-        );
-        DialogListener listener=new DialogListener();
-        builder.setAdapter(adapter,listener);
-        builder.setNegativeButton("취소",null);
-        builder.show();
-    }
-    // 다이얼로그의 리스너
-    class DialogListener implements DialogInterface.OnClickListener{
-
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            // 사용자가 선택한 항목 인덱스번째의 type 값을 가져온다.
-            String type=category_value_array[i];
-            // 주변 정보를 가져온다
-            getNearbyPlace(type);
-        }
-    }
-
-    //주변 정보 가져오기
-    public void getNearbyPlace(String type_keyword){
-        NetworkThread thread=new NetworkThread(type_keyword);
-        thread.start();
-    }
 
     // 현재 위치를 가져온다.
     public void getMyLocation() {
@@ -189,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
     class GpsListener implements LocationListener {
 
         public void onLocationChanged(Location location) {
-            // 현재 위치 값을 저장한다.
+            // 현재 위치 값 저장
             myLocation = location;
 
-            // 위치 측정을 중단한다.
+            // 위치 측정 중단
             manager.removeUpdates(this);
 
-            // 지도를 현재 위치로 이동시킨다.
+            // 지도 현재 위치로 이동
             showMyLocation();
         }
 
@@ -211,18 +179,18 @@ public class MainActivity extends AppCompatActivity {
 
     // 현재 위치를 기반으로 지도를 표시한다.
     public void showMyLocation() {
-        // LocationManager.GPS_PROVIDER 부분에서 null 값을 가져올 경우를 대비하여 장치
+        // Defensive Coding
         if (myLocation == null) {
             return;
         }
-        // 현재 위치값을 추출한다.
+        // 현재 위치값 추출
         double lat = myLocation.getLatitude();
         double lng = myLocation.getLongitude();
 
-        // 위도 경도를 관리하는 객체를 생성
+        // 위도 경도 변화 객체 생성
         LatLng position = new LatLng(lat, lng);
 
-        // 현재 위치를 설정한다.
+        // 현재 위치 설정.
         CameraUpdate update1 = CameraUpdateFactory.newLatLng(position);
         map.moveCamera(update1);
 
@@ -243,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -265,6 +234,73 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    // 주변 카테고리 리스트
+    private void showCategoryList() {
+        // 카테고리 리스트를 띄우기
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("장소 타입 선택");
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(
+                this,android.R.layout.simple_list_item_1,category_name_array
+        );
+        DialogListener listener=new DialogListener();
+        builder.setAdapter(adapter,listener);
+        builder.setNegativeButton("취소",null);
+        builder.show();
+    }
+
+    // 다이얼로그의 리스너
+    class DialogListener implements DialogInterface.OnClickListener{
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            // 사용자가 선택한 항목 인덱스번째의 type 값을 가져온다.
+            String type=category_value_array[i];
+
+            selectedCategoryIndex = i; // 사용자가 선택한 항목의 인덱스를 저장
+
+            // 주변 정보를 가져온다
+            getNearbyPlace(type);
+        }
+    }
+
+    //주변 정보 가져오기
+    public void getNearbyPlace(String type_keyword){
+        NetworkThread thread=new NetworkThread(type_keyword);
+        thread.start();
+    }
+    public void showMarker(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 지도에 마커 표시
+
+                // 기존 마커를 모두 제거
+                for (Marker marker : markers_list) {
+                    marker.remove();
+                }
+                markers_list.clear();
+
+                // 리스트만큼 마커 객체 만들기
+                for (int i = 0; i < lat_list.size(); i++) {
+                    // 값 추출
+                    double lat = lat_list.get(i);
+                    double lng = lng_list.get(i);
+                    String name = name_list.get(i);
+                    String vicinity = vicinity_list.get(i);
+                     // 생성 예정 마커의 정보 보유 객체 생성
+                    MarkerOptions options = new MarkerOptions();
+                    // 위치설정
+                    LatLng pos = new LatLng(lat, lng);
+                    options.position(pos);
+                    // 말풍선이 표시될 값 설정
+                    options.title(name);
+                    options.snippet(vicinity);
+                    // 마커 지도 표시
+                    Marker marker = map.addMarker(options);
+                    markers_list.add(marker);
+                    }
+            }
+        });
+    }
     class NetworkThread extends Thread{
         String type_keyword;
         public NetworkThread(String type_keyword){
@@ -279,16 +315,17 @@ public class MainActivity extends AppCompatActivity {
                 name_list.clear();
                 vicinity_list.clear();
 
-                // 접속할 페이지 주소
+                // 검색 페이지 주소 설정
                 String site="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
                 site+="?location="+myLocation.getLatitude()+","
                         +myLocation.getLongitude()
-                        // 여기 radius가 범위 설정, 수정시 여기 건들이기
+                        // 여기서 범위 설정, 지금은 1km
                         +"&radius=1000&sensor=false&language=ko"
                         +"&key=AIzaSyC2kNOA7cqmGt9fxWfJioxewwrwqi7tgiA";
                 if(type_keyword!=null && type_keyword.equals("all")==false){
-                    site+="&types="+type_keyword;
+                    site+="&type="+type_keyword;
                 }
+                Log.d("URL", site);
                 // 접속
                 URL url=new URL(site);
                 URLConnection conn=url.openConnection();
@@ -314,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
                 if(status.equals("OK")){
                     //results 배열을 가져온다
                     JSONArray results=root.getJSONArray("results");
-
                     // 개수만큼 반복한다.
                     for(int i=0; i<results.length() ; i++){
                         // 객체를 추출한다.(장소하나의 정보)
@@ -324,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject location=geometry.getJSONObject("location");
                         double lat=location.getDouble("lat");
                         double lng=location.getDouble("lng");
-
                         // 장소 이름 추출
                         String name=obj1.getString("name");
                         // 대략적인 주소 추출
@@ -337,47 +372,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     showMarker();
                 }
-                else{
-                    Toast.makeText(getApplicationContext(),"가져온 데이터가 없습니다.",Toast.LENGTH_LONG).show();
+                else {
+                    String selectedOption = category_name_array[selectedCategoryIndex]; // 사용자가 선택한 옵션 이름
+                    String message = "주변에 " + selectedOption + "이(가) 없습니다.";
+                    Log.d("Toast", message);
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                 }
-
             }catch (Exception e){e.printStackTrace();}
         }
-    }
-    public void showMarker(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // 지도에 마커를 표시한다.
-                // 지도에 표시되어있는 마커를 모두 제거한다.
-                for(Marker marker : markers_list){
-                    marker.remove();
-                }
-                markers_list.clear();
-
-                // 가져온 데이터의 수 만큼 마커 객체를 만들어 표시한다.
-                for(int i= 0 ; i< lat_list.size() ; i++){
-                    // 값 추출
-                    double lat= lat_list.get(i);
-                    double lng=lng_list.get(i);
-                    String name=name_list.get(i);
-                    String vicinity=vicinity_list.get(i);
-                    // 생성할 마커의 정보를 가지고 있는 객체를 생성
-                    MarkerOptions options=new MarkerOptions();
-                    // 위치설정
-                    LatLng pos=new LatLng(lat,lng);
-                    options.position(pos);
-                    // 말풍선이 표시될 값 설정
-                    options.title(name);
-                    options.snippet(vicinity);
-                    // 아이콘 설정
-                    //BitmapDescriptor icon= BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
-                    //options.icon(icon);
-                    // 마커를 지도에 표시한다.
-                    Marker marker=map.addMarker(options);
-                    markers_list.add(marker);
-                }
-            }
-        });
     }
 }
