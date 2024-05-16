@@ -188,7 +188,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // 이미지의 ExifOrientation 값을 각도로 변환
+    /*1. 파일을 만들고
+
+    2. 그 파일을 타겟으로 사진을 찍어 저장하여
+
+    3. 그 파일에 찍은 이미지가 저장되고
+
+    4, 그 파일의 uri를 이용해 이미지를 띄울수 있다!*/
+
+    // 이미지의 ExifOrientation 값을 각도로 변환 (돌려서 나오지 않게)
     private int exifOrientationToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
@@ -207,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    // 카메라 앱을 실행하여 사진을 찍는 인텐트를 보내는
+    // 카메라 앱을 실행하여 사진을 찍는 작업
     private void sendTakePhotoIntent(){
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -228,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //이미지를 촬영하고 결과를 받으면 호출 , onActivityResult내에서는  createImageFile을 호출하여 이미지 파일을 생성
+    //이미지 뷰에 띄운다
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -302,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //check file on the device
+    //파일이 장치에 있는지 확인
     private void checkFile(File dir, String lang) {
         //디렉토리가 없으면 디렉토리를 만들고 그후에 파일을 카피
         if(!dir.exists()&& dir.mkdirs()) {
@@ -318,5 +328,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
 
