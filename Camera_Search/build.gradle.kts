@@ -1,5 +1,5 @@
 //build.gradle.kts(Module:app)부분에 
-//implementation("com.rmtheis:tess-two:5.4.1") 이 부분 만 추가 
+//implementation("com.rmtheis:tess-two:5.4.1") 이 부분 만 추가
 
 
 plugins {
