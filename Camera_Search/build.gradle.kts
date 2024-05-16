@@ -1,4 +1,48 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+//build.gradle.kts(Module:app)부분에 
+//implementation("com.rmtheis:tess-two:5.4.1") 이 부분 만 추가 
+
+
 plugins {
-    id("com.android.application") version "8.2.2" apply false
+    id("com.android.application")
+}
+
+android {
+    namespace = "com.example.rdmd1_3"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.rdmd1_3"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    implementation("com.rmtheis:tess-two:5.4.1")
 }
