@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 site += "?location=" + myLocation.getLatitude() + ","
                         + myLocation.getLongitude()
                         // 여기서 범위 설정, 지금은 1km
-                        + "&radius=1&sensor=false&language=ko"
+                        + "&radius=1000&sensor=false&language=ko"
                         + "&key=AIzaSyC2kNOA7cqmGt9fxWfJioxewwrwqi7tgiA";
                 if (type_keyword != null && type_keyword.equals("all") == false) {
                     site += "&type=" + type_keyword;
