@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Mobile_Final"
+        tools:replace="android:allowBackup"
+        tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC2kNOA7cqmGt9fxWfJioxewwrwqi7tgiA" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+    <!-- 사용할 Open GL 라이브러리 설정-->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <!--지도 사용 권한-->
+    <permission android:name="com.example.kjfy.an66_googlelbs.permission.MAP_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.example.kjy.an66_googlelbs.permission.MAP_RECEIVE"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 외부 메모리 사용권한-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--구글 서비스 사용권한-->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+</manifest>
