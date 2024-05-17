@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     // 지도의 표시한 마커(주변장소표시)를 관리하는 객체를 담을 리스트
 
     public int selectedCategoryIndex = -1;
+    Toast t;
 
     ArrayList<Marker> markers_list;
     // 다이얼로그를 구성하기 위한 배열
@@ -301,69 +303,71 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    class NetworkThread extends Thread{
+    class NetworkThread extends Thread {
         String type_keyword;
-        public NetworkThread(String type_keyword){
-            this.type_keyword=type_keyword;
+
+        public NetworkThread(String type_keyword) {
+            this.type_keyword = type_keyword;
         }
+
         @Override
         public void run() {
-            try{
-                //데이터를 담아놓을 리스트를 초기화한다.
+            try {
+                // 데이터를 담아놓을 리스트를 초기화한다.
                 lat_list.clear();
                 lng_list.clear();
                 name_list.clear();
                 vicinity_list.clear();
 
                 // 검색 페이지 주소 설정
-                String site="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
-                site+="?location="+myLocation.getLatitude()+","
-                        +myLocation.getLongitude()
+                String site = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+                site += "?location=" + myLocation.getLatitude() + ","
+                        + myLocation.getLongitude()
                         // 여기서 범위 설정, 지금은 1km
-                        +"&radius=1000&sensor=false&language=ko"
-                        +"&key=AIzaSyC2kNOA7cqmGt9fxWfJioxewwrwqi7tgiA";
-                if(type_keyword!=null && type_keyword.equals("all")==false){
-                    site+="&type="+type_keyword;
+                        + "&radius=1&sensor=false&language=ko"
+                        + "&key=AIzaSyC2kNOA7cqmGt9fxWfJioxewwrwqi7tgiA";
+                if (type_keyword != null && type_keyword.equals("all") == false) {
+                    site += "&type=" + type_keyword;
                 }
                 Log.d("URL", site);
                 // 접속
-                URL url=new URL(site);
-                URLConnection conn=url.openConnection();
+                URL url = new URL(site);
+                URLConnection conn = url.openConnection();
                 // 스트림 추출
-                InputStream is=conn.getInputStream();
-                InputStreamReader isr =new InputStreamReader(is,"utf-8");
-                BufferedReader br=new BufferedReader(isr);
-                String str=null;
-                StringBuffer buf=new StringBuffer();
+                InputStream is = conn.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is, "utf-8");
+                BufferedReader br = new BufferedReader(isr);
+                String str = null;
+                StringBuffer buf = new StringBuffer();
                 // 읽어온다
-                do{
-                    str=br.readLine();
-                    if(str!=null){
+                do {
+                    str = br.readLine();
+                    if (str != null) {
                         buf.append(str);
                     }
-                }while(str!=null);
-                String rec_data=buf.toString();
+                } while (str != null);
+                String rec_data = buf.toString();
                 // JSON 데이터 분석
-                JSONObject root=new JSONObject(rec_data);
-                //status 값을 추출한다.
-                String status=root.getString("status");
+                JSONObject root = new JSONObject(rec_data);
+                // status 값을 추출한다.
+                String status = root.getString("status");
                 // 가져온 값이 있을 경우에 지도에 표시한다.
-                if(status.equals("OK")){
-                    //results 배열을 가져온다
-                    JSONArray results=root.getJSONArray("results");
+                if (status.equals("OK")) {
+                    // results 배열을 가져온다
+                    JSONArray results = root.getJSONArray("results");
                     // 개수만큼 반복한다.
-                    for(int i=0; i<results.length() ; i++){
+                    for (int i = 0; i < results.length(); i++) {
                         // 객체를 추출한다.(장소하나의 정보)
-                        JSONObject obj1=results.getJSONObject(i);
+                        JSONObject obj1 = results.getJSONObject(i);
                         // 위도 경도 추출
-                        JSONObject geometry=obj1.getJSONObject("geometry");
-                        JSONObject location=geometry.getJSONObject("location");
-                        double lat=location.getDouble("lat");
-                        double lng=location.getDouble("lng");
+                        JSONObject geometry = obj1.getJSONObject("geometry");
+                        JSONObject location = geometry.getJSONObject("location");
+                        double lat = location.getDouble("lat");
+                        double lng = location.getDouble("lng");
                         // 장소 이름 추출
-                        String name=obj1.getString("name");
+                        String name = obj1.getString("name");
                         // 대략적인 주소 추출
-                        String vicinity=obj1.getString("vicinity");
+                        String vicinity = obj1.getString("vicinity");
                         // 데이터를 담는다.
                         lat_list.add(lat);
                         lng_list.add(lng);
@@ -371,14 +375,23 @@ public class MainActivity extends AppCompatActivity {
                         vicinity_list.add(vicinity);
                     }
                     showMarker();
-                }
-                else {
+                } else {
                     String selectedOption = category_name_array[selectedCategoryIndex]; // 사용자가 선택한 옵션 이름
                     String message = "주변에 " + selectedOption + "이(가) 없습니다.";
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+                            Gravity Gravity = null;
+                            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast.show();
+                        }
+                    });
                     Log.d("Toast", message);
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                 }
-            }catch (Exception e){e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
