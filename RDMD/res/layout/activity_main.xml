@@ -16,17 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:title=" "/>
 
-    <!-- MapFragment 전용 툴바 -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/map_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorOnPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone" /> <!-- 기본적으로 숨겨둠 -->
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
