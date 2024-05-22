@@ -11,10 +11,10 @@
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" />
     <fragment
-        android:id="@+id/navigation_pet"
-        android:name="androidtown.org.termproject.ui.pet.PetFragment"
-        android:label="@string/title_pet"
-        tools:layout="@layout/fragment_pet" />
+        android:id="@+id/navigation_camera"
+        android:name="androidtown.org.termproject.ui.camera.CameraFragment"
+        android:label="@string/title_camera"
+        tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/navigation_home"
         android:name="androidtown.org.termproject.ui.home.HomeFragment"
