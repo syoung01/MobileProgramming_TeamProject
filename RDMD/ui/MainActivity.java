@@ -1,6 +1,11 @@
 package androidtown.org.termproject;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -9,15 +14,27 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.appcompat.widget.Toolbar;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import androidtown.org.termproject.databinding.ActivityMainBinding;
 import androidtown.org.termproject.ui.custom.CustomFragment;
+import androidtown.org.termproject.ui.rank.RankFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_map, R.id.navigation_pet, R.id.navigation_home,
+                R.id.navigation_map, R.id.navigation_camera, R.id.navigation_home,
                 R.id.navigation_custom, R.id.navigation_rank)
                 .build();
 
@@ -42,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         // ActionBar를 설정할 때도 NavHostFragment를 사용합니다.
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
@@ -58,9 +75,53 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        /*//소프트키 없애기 (전체화면)
+        setFullScreen();*/
+
+    }
+    //전체 화면 관련 코드
+    private void setFullScreen() {
+        /*View view;
+        view = findViewById(R.id.container);
+        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);*/
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+    public void onClick_Main(View view) {
+        setFullScreen();
     }
 
-    // 버튼 클릭 이벤트를 처리하는 메서드
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_top, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // 뒤로가기 버튼 클릭 시 처리할 코드
+            // 예를 들어, HomeFragment로 이동하려면 NavController를 사용하여 navigate() 메서드를 호출합니다.
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_home);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // CustomFragment 버튼 클릭 이벤트를 처리하는 메서드
     public void mOnClick(View v) {
         if (v.getId() == R.id.Ueser1) {
             CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
@@ -124,4 +185,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, (AppBarConfiguration) null)
                 || super.onSupportNavigateUp();
     }
+
 }
