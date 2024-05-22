@@ -54,7 +54,7 @@
                 android:drawableTop="@drawable/ic_custom_main_24dp"
                 android:text="@string/main_custom" />
 
-            <!-- 동물 병원 버튼 -->
+            <!-- 카메라 서치 버튼 -->
             <Button
                 android:id="@+id/mainButtonCamera"
                 android:layout_width="wrap_content"
