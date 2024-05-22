@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFFFF"
+    android:paddingTop="?attr/actionBarSize"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
         <Button
@@ -38,7 +40,7 @@
                 android:padding="16dp"
                 android:layout_columnWeight="1"
                 android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_map_main_32px"
+                android:drawableTop="@drawable/ic_map2_main_24dp"
                 android:text="@string/main_map" />
 
             <!-- 맞춤형 특수 병원 버튼 -->
@@ -49,19 +51,19 @@
                 android:padding="16dp"
                 android:layout_columnWeight="1"
                 android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_custom_main_32px"
+                android:drawableTop="@drawable/ic_custom_main_24dp"
                 android:text="@string/main_custom" />
 
             <!-- 동물 병원 버튼 -->
             <Button
-                android:id="@+id/mainButtonPet"
+                android:id="@+id/mainButtonCamera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:layout_columnWeight="1"
                 android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_pet_main_32px"
-                android:text="@string/main_pet" />
+                android:drawableTop="@drawable/ic_camera_main_24dp"
+                android:text="@string/main_camera" />
 
             <!-- 우수 기관 버튼 -->
             <Button
@@ -71,23 +73,10 @@
                 android:padding="16dp"
                 android:layout_columnWeight="1"
                 android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_rank_main_32px"
+                android:drawableTop="@drawable/ic_rank_main_24dp"
                 android:text="@string/main_rank" />
         </GridLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
