@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        // MainActivity에서 바텀 네비게이션 이벤트를 처리할 때 NavHostFragment를 사용합니다.
+        // MainActivity에서 바텀 네비게이션 이벤트를 처리할 때 NavHostFragment를 사용
         NavigationUI.setupWithNavController(navView, navController);
 
-        // ActionBar를 설정할 때도 NavHostFragment를 사용합니다.
+        // ActionBar를 설정할 때도 NavHostFragment를 사용
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,29 +76,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        /*//소프트키 없애기 (전체화면)
-        setFullScreen();*/
-
-    }
-    //전체 화면 관련 코드
-    private void setFullScreen() {
-        /*View view;
-        view = findViewById(R.id.container);
-        view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-        | View.SYSTEM_UI_FLAG_FULLSCREEN
-        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);*/
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-    }
-    public void onClick_Main(View view) {
-        setFullScreen();
     }
 
     @Override
@@ -112,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // 뒤로가기 버튼 클릭 시 처리할 코드
-            // 예를 들어, HomeFragment로 이동하려면 NavController를 사용하여 navigate() 메서드를 호출합니다.
+            // 예를 들어, HomeFragment로 이동하려면 NavController를 사용하여 navigate() 메서드를 호출
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_home);
             return true;
