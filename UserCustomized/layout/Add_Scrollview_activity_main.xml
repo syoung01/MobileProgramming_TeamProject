@@ -1,0 +1,147 @@
+/*ScrollView는 직접적으로 하나의 자식 을 가져야 해서 
+ ScrollView 안에 여러 자식(TableLayout, TextView, ListView)이 있어서 문제가 발생
+그래서 안의 내용을 하나의 컨테이너(LinearLayout)로 감싸야 한다. */ 
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textViewUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/User"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_margin="10dp"/>
+
+    <EditText
+        android:id="@+id/EditText1"
+        android:layout_width="381dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewUser"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:hint="@string/editText1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/EditText1"
+        android:layout_margin="15dp"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFE3EE"
+                android:padding="5dp"
+                android:layout_margin="8dp">
+
+                <TableRow>
+                    <TextView
+                        android:layout_width="121dp"
+                        android:drawableRight="@drawable/workers"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/TextUser1"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/Ueser1"
+                        android:onClick="mOnClick"
+                        android:padding="15dp"
+                        android:text="@string/buttonUser1"
+                        android:layout_marginLeft="15dp"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/TextUser2"
+                        android:padding="5dp"
+                        android:layout_width="200dp"
+                        android:gravity="center"
+                        android:drawableRight="@drawable/grandparents"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/Ueser2"
+                        android:text="@string/buttonUser2"
+                        android:padding="15dp"
+                        android:onClick="mOnClick2"
+                        android:layout_marginLeft="15dp"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/TextUser3"
+                        android:padding="5dp"
+                        android:layout_width="200dp"
+                        android:gravity="center"
+                        android:drawableRight="@drawable/kid"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/Ueser3"
+                        android:layout_width="137dp"
+                        android:layout_marginLeft="15dp"
+                        android:onClick="mOnClick3"
+                        android:padding="15dp"
+                        android:text="@string/buttonUser3"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:text="@string/TextUser4"
+                        android:padding="5dp"
+                        android:layout_width="200dp"
+                        android:gravity="center"
+                        android:drawableRight="@drawable/emergency"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/Ueser4"
+                        android:onClick="mOnClick4"
+                        android:padding="15dp"
+                        android:text="@string/ButtonUser4"
+                        android:layout_marginLeft="15dp"/>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/textView"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:background="#FFEFD5"/>
+
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-2dp">
+            </ListView>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
