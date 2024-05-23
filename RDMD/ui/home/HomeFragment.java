@@ -6,33 +6,78 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.viewpager2.widget.ViewPager2;
 
+import androidtown.org.termproject.ImageAdapter;
+import me.relex.circleindicator.CircleIndicator3;
+
+import java.util.Arrays;
+import java.util.List;
+
+import androidtown.org.termproject.ImageSliderAdapter;
 import androidtown.org.termproject.R;
 import androidtown.org.termproject.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FragmentHomeBinding binding;
+    private int[] imageResIds = {R.drawable.img_main_rdmd_position2,
+            R.drawable.img_main_rdmd_position1, R.drawable.img_main_rdmd_position3};
 
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // ViewPager2와 CircleIndicator3 초기화 및 설정
+        ViewPager2 viewPager = root.findViewById(R.id.viewPager);
+        CircleIndicator3 indicator = root.findViewById(R.id.indicator);
+
+        // ViewPager2와 어댑터 설정
+        ImageAdapter adapter = new ImageAdapter(imageResIds, position -> {
+            // 이미지 클릭 시 처리할 로직
+            onImageClick(position);
+        });
+        viewPager.setAdapter(adapter);
+        indicator.setViewPager(viewPager);
+
         // 버튼들에 클릭 리스너 등록
-        binding.mainButtonMap.setOnClickListener(this);
-        binding.mainButtonCustom.setOnClickListener(this);
-        binding.mainButtonCamera.setOnClickListener(this);
-        binding.mainButtonRank.setOnClickListener(this);
+        root.findViewById(R.id.mainButtonMap).setOnClickListener(this);
+        root.findViewById(R.id.mainButtonCustom).setOnClickListener(this);
+        root.findViewById(R.id.mainButtonCamera).setOnClickListener(this);
+        root.findViewById(R.id.mainButtonRank).setOnClickListener(this);
 
         return root;
+    }
+
+    private void onImageClick(int position) {
+
+        /*Toast.makeText(getContext(), "Image " + position + " clicked", Toast.LENGTH_SHORT).show();*/
+
+        NavController navController = Navigation.findNavController(requireActivity(),
+                R.id.nav_host_fragment_activity_main);
+
+        if (position == 0) {
+            String webViewUrl = "https://www.hira.or.kr/ra/eval/getDiagEvlView.do?pgmid=HIRAA030004000100";
+            navController.navigate(R.id.action_navigation_home_to_positionFragment);
+
+        } else if (position == 1) {
+            navController.navigate(R.id.navigation_custom);
+
+        } else if (position == 2) {
+            navController.navigate(R.id.navigation_map);
+        }
     }
 
     @Override
