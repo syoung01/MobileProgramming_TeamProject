@@ -24,58 +24,76 @@
             android:textColor="#ADADAD"
             android:drawableEnd="@drawable/ic_search_main_16px" />
 
-        <!-- 메인 버튼 그리드 (2x2) -->
-        <GridLayout
+        <!-- ViewPager2와 CircleIndicator3를 추가 -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:layout_marginTop="10dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="10dp"/>
+
+        <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            app:ci_drawable="@drawable/indicator_drawable" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:background="#FFFFFFFF" >
+            android:orientation="horizontal"
+            android:paddingBottom="2dp"
+            android:gravity="center"
+            android:background="#FFFFFF">
 
-            <!-- 병원 지도 버튼 -->
-            <Button
+            <include
                 android:id="@+id/mainButtonMap"
+                layout="@layout/custom_main_mapbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_columnWeight="1"
-                android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_map2_main_24dp"
-                android:text="@string/main_map" />
+                android:layout_margin="7dp"
+                />
 
-            <!-- 맞춤형 특수 병원 버튼 -->
-            <Button
+            <include
                 android:id="@+id/mainButtonCustom"
+                layout="@layout/custom_main_custombutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_columnWeight="1"
-                android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_custom_main_24dp"
-                android:text="@string/main_custom" />
+                android:layout_margin="7dp"
+                />
 
-            <!-- 카메라 서치 버튼 -->
-            <Button
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#FFFFFF">
+
+            <include
                 android:id="@+id/mainButtonCamera"
+                layout="@layout/custom_main_camerabutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_columnWeight="1"
-                android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_camera_main_24dp"
-                android:text="@string/main_camera" />
+                android:layout_margin="7dp"
+                />
 
-            <!-- 우수 기관 버튼 -->
-            <Button
+            <include
                 android:id="@+id/mainButtonRank"
+                layout="@layout/custom_main_rankbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:layout_columnWeight="1"
-                android:background="#FFFFFFFF"
-                android:drawableTop="@drawable/ic_rank_main_24dp"
-                android:text="@string/main_rank" />
-        </GridLayout>
+                android:layout_margin="7dp"
+                />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
