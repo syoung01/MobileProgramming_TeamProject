@@ -22,7 +22,6 @@ import me.relex.circleindicator.CircleIndicator3;
 import java.util.Arrays;
 import java.util.List;
 
-import androidtown.org.termproject.ImageSliderAdapter;
 import androidtown.org.termproject.R;
 import androidtown.org.termproject.databinding.FragmentHomeBinding;
 
