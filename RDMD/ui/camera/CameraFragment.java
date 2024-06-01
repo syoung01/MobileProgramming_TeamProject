@@ -47,20 +47,20 @@ import java.util.Date;
 import androidtown.org.termproject.R;
 
 public class CameraFragment extends Fragment {
-    Bitmap image; //사용되는 이미지
-    private TessBaseAPI mTess; //Tess API reference
-    String datapath = "" ; //언어데이터가 있는 경로
+    Bitmap image; // Image used
+    private TessBaseAPI mTess; // Tess API reference
+    String datapath = "" ; // Paths (language data)
 
-    LinearLayout btn_picture; //사진 찍는 버튼
-    LinearLayout btn_ocr; //텍스트 추출 버튼
+    LinearLayout btn_picture; // taking pictures button
+    LinearLayout btn_ocr; // Text extraction button
 
-    private String imageFilePath; //이미지 파일 경로
+    private String imageFilePath; // Image file path
     private Uri p_Uri;
     ImageView imageView;
 
     static final int REQUEST_IMAGE_CAPTURE = 672;
 
-    // OCR 결과를 저장할 변수 추가
+    // variables to store OCR results
     private String OCRresult = "";
 
     @SuppressLint("MissingInflatedId")
@@ -72,21 +72,21 @@ public class CameraFragment extends Fragment {
         btn_ocr = view.findViewById(R.id.ocrButton);
         imageView = view.findViewById(R.id.imageView);
 
-        // 언어파일 경로
+        // Language file path
         datapath = getActivity().getFilesDir() + "/tesseract/";
 
-        // 트레이닝데이터가 카피되어 있는지 체크
+        // Check if training data is copied
         checkFile(new File(datapath + "tessdata/"), "kor");
         checkFile(new File(datapath + "tessdata/"), "eng");
 
         // Tesseract API
-        // 한글 + 영어(함께 추출)
+        // Korean + English (Extract together)
         String lang = "kor+eng";
 
         mTess = new TessBaseAPI();
         mTess.init(datapath, lang);
 
-        // 사진 찍는 버튼 클릭시 카메라 킴
+        // On Camera when user click the button to take a picture
         btn_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,37 +94,37 @@ public class CameraFragment extends Fragment {
             }
         });
 
-        // 텍스트 추출 버튼
+        // Text extraction button
         btn_ocr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 가져와진 사진을 bitmap으로 추출
-                if (imageView != null) { // ImageView가 null이 아닌지 체크
+                // Extract the imported pictures with bitmap
+                if (imageView != null) { // Check ImageView is not null
                     BitmapDrawable d = (BitmapDrawable) imageView.getDrawable();
-                    if (d != null) { // getDrawable()이 null이 아닌지 체크
+                    if (d != null) { // Check if getDrawable() is not null
                         image = d.getBitmap();
-                        Log.d("TextExtraction", "Image is set for OCR"); // 이미지 설정 로그
+                        Log.d("TextExtraction", "Image is set for OCR"); // Image Settings Log
                     } else {
-                        // 이미지가 없을 경우 예외 처리
-                        Log.e("TextExtraction", "No drawable found in ImageView"); // Drawable 없음 로그
+                        // exceptions if images null
+                        Log.e("TextExtraction", "No drawable found in ImageView"); // No Drawable Log
                         return;
                     }
                 } else {
-                    // imageView가 null인 경우 예외 처리
-                    Log.e("TextExtraction", "ImageView is null"); // ImageView null 로그
+                    // exceptions when imageView is null
+                    Log.e("TextExtraction", "ImageView is null"); // ImageView null Log
                     return;
                 }
 
                 //String OCRresult = null;
                 mTess.setImage(image);
 
-                // 텍스트 추출
+                // text extraction
                 OCRresult = mTess.getUTF8Text();
                 Log.d("TextExtraction", "OCR Result: " + OCRresult);
                 TextView OCRTextView = getView().findViewById(R.id.OCRTextView);
                 OCRTextView.setText(OCRresult);
 
-                // 대장암, 폐암, 위암 3개 작성
+                // "대장암, 폐암, 위암" writing out
                 handleOCRResult(OCRresult);
             }
         });
@@ -143,14 +143,14 @@ public class CameraFragment extends Fragment {
 
         SpannableString spannableString = new SpannableString(text1 + text2);
 
-        // 스타일 설정
+        // Style Settings
         spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, text1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new RelativeSizeSpan(1.2f), 0, text1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         spannableString.setSpan(new ForegroundColorSpan(Color.GRAY), text1.length(), (text1 + text2).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new RelativeSizeSpan(0.8f), text1.length(), (text1 + text2).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        // 버튼에 스타일링된 텍스트 설정
+        // Set text styled on the button
         takePictureButton.setText(spannableString);
     }*/
 
@@ -195,7 +195,7 @@ public class CameraFragment extends Fragment {
         dialog.show();
     }
 
-    // 이미지의 ExifOrientation 값을 각도로 변환 (돌려서 나오지 않게)
+    // Converting the ExifOrientation value of the image to an angle (not to come out by turning it around)
     private int exifOrientationToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
@@ -207,14 +207,14 @@ public class CameraFragment extends Fragment {
         return 0;
     }
 
-    // 비트맵을 주어진 각도로 회전
+    // Rotating the bitmap at a given angle
     private Bitmap rotate(Bitmap bitmap, float degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    // 카메라 앱을 실행하여 사진을 찍는 작업
+    // Running the camera app to take pictures
     private void sendTakePhotoIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -234,8 +234,8 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    //이미지를 촬영하고 결과를 받으면 호출 , onActivityResult내에서는  createImageFile을 호출하여 이미지 파일을 생성
-    //이미지 뷰에 띄운다
+    //Call when you take an image and receive the result, call createImageFile within onActivityResult to create an image file
+    //Put it in the image view
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -265,7 +265,7 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    // 이미지 파일을 생성
+    // Create an image file
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "TEST_" + timeStamp + "_";
@@ -279,20 +279,20 @@ public class CameraFragment extends Fragment {
         return image;
     }
 
-    // 언어 데이터 파일을 장치에 복사
+    // Copying a Language Data File to a Device
     private void copyFiles(String lang) {
         try {
-            // 파일이 있을 위치
+            // file location
             String filepath = datapath + "/tessdata/" + lang + ".traineddata";
 
-            // AssetManager에 액세스
+            // Access AssetManager
             AssetManager assetManager = getActivity().getAssets();
 
-            // 읽기/쓰기를 위한 열린 바이트 스트림
+            // Open byte stream for read/write
             InputStream instream = assetManager.open("tessdata/" + lang + ".traineddata");
             OutputStream outstream = new FileOutputStream(filepath);
 
-            // filepath에 의해 지정된 위치에 파일 복사
+            // Copy the file to the location specified by filepath
             byte[] buffer = new byte[1024];
             int read;
 
@@ -310,13 +310,13 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    // 파일이 장치에 있는지 확인
+    // Verify that the file is on user device
     private void checkFile(File dir, String lang) {
-        // 디렉토리가 없으면 디렉토리를 만들고 그 후에 파일을 카피
+        // If the directory does not exist, create a directory and then copy the file
         if (!dir.exists() && dir.mkdirs()) {
             copyFiles(lang);
         }
-        // 디렉토리가 있지만 파일이 없으면 파일카피 진행
+        // If have a directory but don't have a file, proceed to copy the file
         if (dir.exists()) {
             String datafilepath = datapath + "/tessdata/" + lang + ".traineddata";
             File datafile = new File(datafilepath);
