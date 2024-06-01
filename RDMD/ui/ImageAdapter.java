@@ -43,16 +43,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ShapeableImageView imageView; // ShapeableImageView로 변경
+        ShapeableImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
 
-            // 모서리를 둥글게 만들기 위해 ShapeAppearanceModel을 설정합니다.
+            // Set the ShapeAppearanceModel to round the corners
             ShapeAppearanceModel shapeAppearanceModel = new ShapeAppearanceModel()
                     .toBuilder()
-                    .setAllCorners(CornerFamily.ROUNDED, 30) // 원하는 반지름 값을 여기에 설정합니다.
+                    .setAllCorners(CornerFamily.ROUNDED, 30)
                     .build();
             imageView.setShapeAppearanceModel(shapeAppearanceModel);
 
