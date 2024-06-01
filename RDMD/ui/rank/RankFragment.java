@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/*기존 import*/
+/*Existing import*/
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -148,55 +148,55 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
+                        // Read an xml document with information through the open API and show it to listView
                         items.clear();
 
-                        //api 호출을 위한 uri 생성
+                        // Create uri for api call
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            /*과정
-                             * 1. URL 객체 만들어 stream 열고 inputStream에게 준다.
-                             * 2. InputStream은 byte씩 데이터 전송으로 불편 --> InputStreamReader(바이트->문자 입력 스트림으로) 변경
-                             * 3. InputSteamReader를 XmlPullParser에게 준다.
-                             * 4. ui로 띄울 데이터의 내용들은 stringBuffer로 저장.*/
+                            /* Course
+*                             1. Create URL object stream and give it to inputStream.
+*                             2. InputStream is inconvenient to send data byte --> Change the InputStreamReader (byte->text input stream)
+*                             3. Give the InputSteamReader to the XmlPullPacer.
+*                             4. Save the contents of the data to be displayed in ui as a string buffer.*/
 
-                            // URL 객체 생성
+                            // Create URL Object
                             URL url = new URL(queryUrl);
-                            //Stream 열기
+                            // Open Stream
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
+                            // Create an object to parse read XML documents, create a factory first to create xpp (parase)
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // Read XML data from InputStream
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType(); // get Event Types
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "대장암"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "대장암";
+                            String searchAsmGrd = "3"; // check more than 3 times
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) { //Repeat until the end of the XML document
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG: // At the beginning of the tag
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); // Get current disease name
+                                            // Inquiry when the name of the current disease matches the name of the disease you are looking for and when the period of excellence is selected more than three times
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -221,28 +221,28 @@ public class RankFragment extends Fragment {
 
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT: // text in xml tag
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG: // At the end of the tag
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) { // end one information
+                                            // Add parsing results to items list
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
+                            // Message main thread for UI update after loading data
                             handler.sendEmptyMessage(0);
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                            // Handling possible exceptions during xml parsing
+                        } catch (MalformedURLException e) { // Network connection
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { // Input/output
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) { // xml parsing
                             e.printStackTrace();
                         }
                     }
@@ -251,49 +251,42 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType(); 
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "고혈압"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "고혈압";
+                            String searchAsmGrd = "3";
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -317,29 +310,26 @@ public class RankFragment extends Fragment {
                                         }
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG:
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -347,49 +337,42 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType();
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "폐렴"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "폐렴";
+                            String searchAsmGrd = "3";
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -412,30 +395,26 @@ public class RankFragment extends Fragment {
                                         }
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG:
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) {
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -446,56 +425,49 @@ public class RankFragment extends Fragment {
 
     }
 
-    //두번째 라디오 버튼
+    // Second radio button
     public void mOnClick_rank3(View v) {
         if (v.getId() == R.id.rg_btn3) {
             if(rg_btn3.getText().equals("폐암")) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType();
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "폐암"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "폐암"; 
+                            String searchAsmGrd = "3";
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText();
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -518,30 +490,26 @@ public class RankFragment extends Fragment {
                                         }
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG:
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) { 
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -549,49 +517,42 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType();
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "천식"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "천식"; 
+                            String searchAsmGrd = "3"; 
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG: 
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText();
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -615,29 +576,26 @@ public class RankFragment extends Fragment {
 
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT: 
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG:
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -645,49 +603,42 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType(); 
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "관상동맥우회술"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "관상동맥우회술"; 
+                            String searchAsmGrd = "3"; 
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -710,30 +661,26 @@ public class RankFragment extends Fragment {
                                         }
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG: 
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -745,56 +692,49 @@ public class RankFragment extends Fragment {
     }
 
 
-    //세번째 라디오 버튼
+    // The third radio button
     public void mOnClick_rank2(View v) {
         if (v.getId() == R.id.rg_btn2) {
             if(rg_btn2.getText().equals("위암")) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType(); 
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "위암"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "위암"; 
+                            String searchAsmGrd = "3"; 
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -819,31 +759,26 @@ public class RankFragment extends Fragment {
 
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG: 
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) { 
                                             items.add(buffer.toString());
                                         }
                                         break;
                                 }
                                 eventType = xpp.next();
                             }
-
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -851,49 +786,42 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
 
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8")); 
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType();
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "당뇨병"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "당뇨병"; 
+                            String searchAsmGrd = "3";
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG:
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -918,15 +846,13 @@ public class RankFragment extends Fragment {
 
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT: 
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG: 
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) { 
                                             items.add(buffer.toString());
                                         }
 
@@ -934,15 +860,13 @@ public class RankFragment extends Fragment {
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                        } catch (MalformedURLException e) { 
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) {
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) {
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -950,49 +874,41 @@ public class RankFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // open API을 통해 정보를 가진 xml문서를 읽어와서 listView에 보여주기
                         items.clear();
-
-                        //api 호출을 위한 uri 생성
                         String queryUrl = "https://apis.data.go.kr/B551182/exclInstHospAsmInfoService/getExclInstHospAsmInfo?serviceKey=RTtmgcCboZ5HFOb1%2FbZ8ad3E9JzY5H73vHsBzNNGtG4H3DoOQmrCi9SSNHGnm8%2F7P7rQTumoqPE1QyRbuVpeVA%3D%3D" +
                                 "&pageNo=1" +
                                 "&numOfRows=500";
 
                         try {
-                            // URL 객체 생성
                             URL url = new URL(queryUrl);
-                            //Stream 열기
                             InputStream is = url.openStream();
-
-                            //읽어들인 XML 문서를 분석(parse)해주는 객체 생성 , xpp(파서, parase)를 만들려면 팩토리를 먼저 생성
                             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                             XmlPullParser xpp = factory.newPullParser();
-                            xpp.setInput(new InputStreamReader(is, "UTF-8"));  // InputStream으로부터 XML 데이터를 읽어오기
+                            xpp.setInput(new InputStreamReader(is, "UTF-8"));
 
                             String tag;
 
-                            int eventType = xpp.getEventType(); //이벤트 타입 얻어오기
+                            int eventType = xpp.getEventType();
                             StringBuffer buffer = new StringBuffer();
 
                             String currentAsmNm = "";
                             String countAsmGrd = "";
-                            String searchAsmNm = "급성기 뇌졸중"; //질병명 작성
-                            String searchAsmGrd = "3"; //조회는 3회이상만
+                            String searchAsmNm = "급성기 뇌졸중"; 
+                            String searchAsmGrd = "3";
 
-                            while (eventType != XmlPullParser.END_DOCUMENT) { //XML 문서 끝날때까지 반복
+                            while (eventType != XmlPullParser.END_DOCUMENT) {
 
                                 switch (eventType) {
                                     case XmlPullParser.START_DOCUMENT:
                                         break;
 
-                                    case XmlPullParser.START_TAG: // 태그의 시작일 때
+                                    case XmlPullParser.START_TAG: 
                                         tag = xpp.getName();
 
                                         if (tag.equals("item")) ;
                                         else if (tag.equals("asmNm")) {
                                             xpp.next();
-                                            currentAsmNm = xpp.getText(); //현재 질병명 가져오기
-                                            // 현재 질병명 과 찾고자 하는 질병명이 일치할때 and 우수기간 선정 3회 이상일 때 조회
+                                            currentAsmNm = xpp.getText(); 
                                             if (currentAsmNm.equals(searchAsmNm) && countAsmGrd.equals(searchAsmGrd)) {
                                                 buffer.append("\n");
                                                 buffer.append("질병명 : ");
@@ -1017,15 +933,13 @@ public class RankFragment extends Fragment {
 
                                         break;
 
-                                    case XmlPullParser.TEXT: //xml tag안의 text 내용
+                                    case XmlPullParser.TEXT:
                                         break;
 
-                                    case XmlPullParser.END_TAG: // 태그의 끝일 때
+                                    case XmlPullParser.END_TAG: 
 
                                         tag = xpp.getName();
-                                        if (tag.equals("items")) { //하나의 정보가 끝나면
-
-                                            //파싱 결과를 items 리스트에 추가
+                                        if (tag.equals("items")) {
                                             items.add(buffer.toString());
                                         }
 
@@ -1033,15 +947,14 @@ public class RankFragment extends Fragment {
                                 }
                                 eventType = xpp.next();
                             }
-                            //xml 파싱 시 발생 가능한 예외 처리
-                        } catch (MalformedURLException e) { //네트워크 연결 관련
+                           
+                        } catch (MalformedURLException e) {
                             e.printStackTrace();
-                        } catch (IOException e) { //입출력 관련
+                        } catch (IOException e) { 
                             e.printStackTrace();
-                        } catch (XmlPullParserException e) { //xml 파싱 관련
+                        } catch (XmlPullParserException e) { 
                             e.printStackTrace();
                         }
-                        // 데이터 로드 후 UI 업데이트를 위해 메인 스레드에 메시지 보내기
                         handler.sendEmptyMessage(0);
                     }
                 }).start();
@@ -1051,11 +964,11 @@ public class RankFragment extends Fragment {
         }
 
     }
-    //Handler 선언
+    //Handler
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            // UI 업데이트 코드
+            // UI Update Code
             adapter.notifyDataSetChanged();
         }
     };
