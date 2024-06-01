@@ -7,24 +7,24 @@
     android:padding="10dp"
     android:background="@drawable/button_camera_round">
 
-    <!-- 여유 공간 -->
+    <!-- space -->
     <Space
         android:layout_width="20dp"
         android:layout_height="wrap_content" />
 
-    <!-- 이미지 -->
+    <!-- image -->
     <ImageView
         android:layout_width="24dp"
         android:layout_height="32dp"
         android:src="@drawable/picturebutton_camera_512px"
         android:scaleType="fitCenter" />
 
-    <!-- 여유 공간 -->
+    <!-- space -->
     <Space
         android:layout_width="15dp"
         android:layout_height="wrap_content" />
 
-    <!-- 텍스트 -->
+    <!-- text -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
