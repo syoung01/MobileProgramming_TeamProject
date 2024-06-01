@@ -52,24 +52,24 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        // MainActivity에서 바텀 네비게이션 이벤트를 처리할 때 NavHostFragment를 사용
+        // Use NavHostFragment when MainActivity handles bottom navigation events
         NavigationUI.setupWithNavController(navView, navController);
 
-        // ActionBar를 설정할 때도 NavHostFragment를 사용
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // Use NavHostFragment to set up ActionBar as well
+        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_home) {
-                //다시 home으로 이동 (home 아이콘 클릭 시)
+                // Go back to home (when user click the home icon)
                 if (navController.getCurrentDestination().getId() != R.id.navigation_home) {
                     navController.navigate(R.id.navigation_home);
                     return true;
                 }
             } else {
-//                다른 아이콘 클릭 시 이벤트 처리
+                // events when user click on another icon
                 navController.navigate(item.getItemId());
                 return true;
             }
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // 뒤로가기 버튼 클릭 시 처리할 코드
-            // 예를 들어, HomeFragment로 이동하려면 NavController를 사용하여 navigate() 메서드를 호출
+            // processed when user click the Back button
+            // To go to HomeFragment, use the NavController to invoke the navigate() method
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_home);
             return true;
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // CustomFragment 버튼 클릭 이벤트를 처리하는 메서드
+    // to handle Custom Fragment button click events
     public void mOnClick(View v) {
         if (v.getId() == R.id.Ueser1) {
             CustomFragment customFragment = (CustomFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_custom);
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    // RankFragment 버튼 클릭 이벤트를 처리하는 메서드
+    // to handle RankFragment button click events
     public void mOnClick_rank1(View v) {
         if (v.getId() == R.id.rg_btn1) {
             RankFragment rankFragment = (RankFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_rank);
