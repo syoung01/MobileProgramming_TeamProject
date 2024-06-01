@@ -39,19 +39,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // ViewPager2와 CircleIndicator3 초기화 및 설정
+        // Initialize and set up ViewPager2 and CircleIndicator3
         ViewPager2 viewPager = root.findViewById(R.id.viewPager);
         CircleIndicator3 indicator = root.findViewById(R.id.indicator);
 
-        // ViewPager2와 어댑터 설정
+        // ViewPager2 and Adapter Settings
         ImageAdapter adapter = new ImageAdapter(imageResIds, position -> {
-            // 이미지 클릭 시 처리할 로직
             onImageClick(position);
         });
         viewPager.setAdapter(adapter);
         indicator.setViewPager(viewPager);
-
-        // 버튼들에 클릭 리스너 등록
+        
         root.findViewById(R.id.mainButtonMap).setOnClickListener(this);
         root.findViewById(R.id.mainButtonCustom).setOnClickListener(this);
         root.findViewById(R.id.mainButtonCamera).setOnClickListener(this);
@@ -89,7 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment_activity_main);
-        // 클릭된 버튼에 따라 다른 fragment로 이동
+        // Move to another fragment according to the clicked button
         if (v.getId() == R.id.mainButtonMap) {
             navController.navigate(R.id.navigation_map);
         } else if (v.getId() == R.id.mainButtonCustom) {
