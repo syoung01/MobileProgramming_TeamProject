@@ -26,9 +26,9 @@ public class positionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_position, container, false);
 
-        // 웹뷰 초기화
+        // Initialize WebView
         webView = view.findViewById(R.id.webView);
-        webView.getSettings().setJavaScriptEnabled(true); // 자바스크립트 활성화
+        webView.getSettings().setJavaScriptEnabled(true); // Enabling JavaScript
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
 
