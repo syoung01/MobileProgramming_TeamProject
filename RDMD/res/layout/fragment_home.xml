@@ -24,7 +24,7 @@
             android:textColor="#ADADAD"
             android:drawableEnd="@drawable/ic_search_main_16px" />
 
-        <!-- ViewPager2와 CircleIndicator3를 추가 -->
+        <!-- ViewPager2 and CircleIndicator3 -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
@@ -50,6 +50,8 @@
             android:paddingBottom="2dp"
             android:gravity="center"
             android:background="#FFFFFF">
+
+            <!-- button layout -->
 
             <include
                 android:id="@+id/mainButtonMap"
