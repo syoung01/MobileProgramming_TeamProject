@@ -17,7 +17,7 @@
         >
 
 
-        <!-- 이미지 -->
+        <!-- image -->
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="85dp"
@@ -26,7 +26,7 @@
             android:src="@drawable/ic_map_main_green_512px"
             android:layout_marginBottom="5dp"/>
 
-        <!-- 텍스트 -->
+        <!-- text -->
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
