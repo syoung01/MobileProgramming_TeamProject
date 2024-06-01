@@ -14,14 +14,14 @@
         android:background="#ffffff"
         android:id="@+id/imageContainer">
 
-        <!-- 사진 보여주는 이미지뷰 -->
+        <!-- Image view showing pictures -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/black"
             android:id="@+id/imageView" />
 
-        <!-- 사진 찍는 버튼 -->
+        <!-- the button for taking pictures -->
         <include
             android:id="@+id/takePicture"
             layout="@layout/custom_takepicture"
@@ -45,7 +45,7 @@
         android:id="@+id/OCRButtonContainer"
         android:layout_marginTop="10dp">
 
-        <!-- 텍스트 추출 버튼 -->
+        <!-- Text extraction button -->
         <include
             android:id="@+id/ocrButton"
             layout="@layout/custom_ocrbutton"
@@ -69,7 +69,7 @@
         android:padding="10dp"
         android:id="@+id/OCRTextViewContainer" >
 
-        <!-- 텍스트 추출 뷰 -->
+        <!-- Text extraction view -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
